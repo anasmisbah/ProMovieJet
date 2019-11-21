@@ -1,7 +1,11 @@
 package com.example.promoviejet.ui.detail.movie
 
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.request.RequestOptions
@@ -11,6 +15,7 @@ import com.example.promoviejet.data.local.entity.Movie
 import com.example.promoviejet.ui.detail.DetailViewModel
 import com.example.promoviejet.utils.EXTRA_MOVIE
 import com.example.promoviejet.utils.GlideApp
+import com.example.promoviejet.utils.toast
 import com.example.promoviejet.viewmodel.ViewModelFactory
 
 import kotlinx.android.synthetic.main.activity_detail_movie.*
@@ -21,6 +26,10 @@ class DetailMovieActivity : AppCompatActivity() {
     private val viewModel by lazy {
         ViewModelProviders.of(this, ViewModelFactory.getInstance(this.application)).get(DetailViewModel::class.java)
     }
+
+    private var isFavorite = false
+    lateinit var movieTemp: Movie
+    private var menu: Menu?= null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +42,12 @@ class DetailMovieActivity : AppCompatActivity() {
         movieId?.let {
             viewModel.getMovie(it).observe(this,Observer {movie->
                 populateMovie(movie = movie)
+                movieTemp = movie
+                if(viewModel.checkMovieFavorite(movie.id)) isFavorite = true
+                setfavorite()
             })
         }
+
     }
 
     private fun populateMovie(movie: Movie) {
@@ -61,4 +74,40 @@ class DetailMovieActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.nav_favorite,menu)
+        this.menu = menu
+        setfavorite()
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.favorite_menu ->{
+                if (isFavorite) removeFromFavorite() else addToFavorite()
+
+                isFavorite = !isFavorite
+                setfavorite()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun addToFavorite(){
+        if (viewModel.addMovieFavorite(movieTemp)) toast("berhasil menambah favorite") else toast("gagal menambah favorite")
+    }
+    private fun removeFromFavorite(){
+        if (viewModel.removeMovieFavorite(movieTemp)) toast("berhasil menghapus favorite") else toast("gagal menghapus favorite")
+    }
+
+    private fun setfavorite() {
+        if (menu == null) return
+        val menuItem = menu?.findItem(R.id.favorite_menu)
+        if (isFavorite) {
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite)
+        } else {
+            menuItem?.icon = ContextCompat.getDrawable(this, R.drawable.ic_favorite_border_white)
+        }
+    }
 }

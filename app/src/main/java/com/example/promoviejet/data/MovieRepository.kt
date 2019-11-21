@@ -1,6 +1,9 @@
 package com.example.promoviejet.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.example.promoviejet.data.local.LocalRepository
 import com.example.promoviejet.data.local.entity.Movie
 import com.example.promoviejet.data.local.entity.TvShow
@@ -39,36 +42,37 @@ class MovieRepository(private val remoteRepository: RemoteRepository,private val
     }
 
     //favorites Movie
-    override fun getFavoritesMovie(): LiveData<List<Movie>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getFavoritesMovie(): LiveData<PagedList<Movie>> {
+        return LivePagedListBuilder<Int,Movie>(localRepository.getFavoriteMoviePaged(),20).build()
+
     }
-    override fun addFavoriteMovie(movie: Movie) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun addFavoriteMovie(movie: Movie) : Boolean {
+        return localRepository.addFavoriteMovie(movie)
     }
 
-    override fun removeFavoriteMovie(movie: Movie) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun removeFavoriteMovie(movie: Movie) : Boolean {
+        return localRepository.removeFavoriteMovie(movie)
     }
 
     override fun checkFavoriteMovie(id: Int): Movie {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return localRepository.checkFacoriteMovie(id)
     }
 
     //favorites tvShow
-    override fun getFavoritesTvShow(): LiveData<List<Movie>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getFavoritesTvShow(): LiveData<PagedList<TvShow>> {
+        return LivePagedListBuilder<Int,TvShow>(localRepository.getFavoriteTvShowPaged(),20).build()
     }
 
-    override fun addFavoriteTvShow(tvShow: TvShow) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun addFavoriteTvShow(tvShow: TvShow) : Boolean {
+        return localRepository.addFavoriteTvShow(tvShow)
     }
 
-    override fun removeFavoriteTvShow(tvShow: TvShow) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun removeFavoriteTvShow(tvShow: TvShow) : Boolean {
+        return localRepository.removeFavoriteTvShow(tvShow)
     }
 
     override fun checkFavoriteTvShow(id: Int): TvShow {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return localRepository.checkFacoriteTvShow(id)
     }
 
 }

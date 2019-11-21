@@ -36,7 +36,7 @@ class MovieAdapter internal constructor(
     }
 
 
-    inner class MovieViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView){
+     class MovieViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bindItem(movie: Movie, listener: (Movie) -> Unit) = with(itemView){
             tv_item_movie_title.text = movie.title
             tv_item_movie_date.text = movie.releaseDate

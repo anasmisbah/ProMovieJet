@@ -1,5 +1,6 @@
 package com.example.promoviejet.data.local
 
+import androidx.paging.DataSource
 import com.example.promoviejet.data.local.entity.Movie
 import com.example.promoviejet.data.local.entity.TvShow
 import com.example.promoviejet.data.local.room.MovieDao
@@ -16,49 +17,39 @@ class LocalRepository (private val movieDao: MovieDao){
         }
     }
 
+    fun getFavoriteMoviePaged(): DataSource.Factory<Int,Movie>{
+        return movieDao.getMovies()
+    }
+
+    fun getFavoriteTvShowPaged():DataSource.Factory<Int,TvShow>{
+        return movieDao.getTvShows()
+    }
+
     fun addFavoriteMovie(movie:Movie):Boolean{
-
-        movieDao.insertMovie(movie)
-
-
-        return true
+        val result = movieDao.insertMovie(movie)
+        return result > 0
     }
 
     fun removeFavoriteMovie(movie: Movie):Boolean{
-
-        movieDao.deleteMovie(movie)
-
-        return true
+        val result = movieDao.deleteMovie(movie)
+        return result > 0
     }
 
     fun checkFacoriteMovie(id:Int):Movie{
-        val movie = movieDao.findFavoriteMovie(id)
-
-        return movie
-
+        return movieDao.findFavoriteMovie(id)
     }
 
     fun addFavoriteTvShow(tvShow:TvShow):Boolean{
-
-        movieDao.insertTvShow(tvShow)
-
-
-        return true
+        val result =movieDao.insertTvShow(tvShow)
+        return result > 0
     }
 
     fun removeFavoriteTvShow(tvShow: TvShow):Boolean{
-
-        movieDao.deleteTvShow(tvShow)
-
-        return true
+        val result =movieDao.deleteTvShow(tvShow)
+        return result > 0
     }
 
     fun checkFacoriteTvShow(id:Int): TvShow {
-        val tvShow = movieDao.findFavoriteTvShow(id)
-
-        return tvShow
-
+        return movieDao.findFavoriteTvShow(id)
     }
-
-
 }

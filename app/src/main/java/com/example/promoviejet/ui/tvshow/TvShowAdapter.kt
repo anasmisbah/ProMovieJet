@@ -35,7 +35,7 @@ class TvShowAdapter internal constructor(
     }
 
 
-    inner class TvShowViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView){
+     class TvShowViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView){
         fun bindItem(tvShow: TvShow, listener: (TvShow) -> Unit) = with(itemView){
             tv_item_tvshow_title.text = tvShow.title
             tv_item_tvshow_date.text = tvShow.releaseDate
