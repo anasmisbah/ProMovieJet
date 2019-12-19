@@ -68,4 +68,46 @@ class DetailViewModelTest {
         verify(observerTvShow).onChanged(dummyTvShow)
 
     }
+
+    @Test
+    fun checkMovieFavorite(){
+        `when`(movieRepository.checkFavoriteMovie(dummyMovie.id.toInt())).thenReturn(dummyMovie)
+        val expect = dummyMovie !=null
+        val result = detailViewModel.checkMovieFavorite(dummyMovie.id)
+        assertEquals(expect,result)
+    }
+
+    @Test
+    fun addMovieFavorite(){
+        `when`(movieRepository.addFavoriteMovie(dummyMovie)).thenReturn(true)
+        val result = detailViewModel.addMovieFavorite(dummyMovie)
+        assertEquals(true,result)
+    }
+    @Test
+    fun removeMovieFavorite(){
+        `when`(movieRepository.removeFavoriteMovie(dummyMovie)).thenReturn(true)
+        val result = detailViewModel.removeMovieFavorite(dummyMovie)
+        assertEquals(true,result)
+    }
+
+    @Test
+    fun checkTvShowFavorite(){
+        `when`(movieRepository.checkFavoriteTvShow(dummyTvShow.id.toInt())).thenReturn(dummyTvShow)
+        val expect = dummyTvShow != null
+        val result = detailViewModel.checkTvShowFavorite(dummyTvShow.id)
+        assertEquals(expect,result)
+    }
+    @Test
+    fun addTvShowFavorite(){
+        `when`(movieRepository.addFavoriteTvShow(dummyTvShow)).thenReturn(true)
+        val result = detailViewModel.addTvShowFavorite(dummyTvShow)
+        assertEquals(true,result)
+    }
+    @Test
+    fun removeTvShowFavorite(){
+        `when`(movieRepository.removeFavoriteTvShow(dummyTvShow)).thenReturn(true)
+        val result = detailViewModel.removeTvShowFavorite(dummyTvShow)
+        assertEquals(true,result)
+
+    }
 }

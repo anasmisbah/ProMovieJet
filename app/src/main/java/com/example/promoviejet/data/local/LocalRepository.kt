@@ -2,6 +2,7 @@ package com.example.promoviejet.data.local
 
 import androidx.paging.DataSource
 import com.example.promoviejet.data.local.entity.Movie
+import com.example.promoviejet.data.local.entity.MovieTemp
 import com.example.promoviejet.data.local.entity.TvShow
 import com.example.promoviejet.data.local.room.MovieDao
 
@@ -52,4 +53,8 @@ class LocalRepository (private val movieDao: MovieDao){
     fun checkFacoriteTvShow(id:Int): TvShow {
         return movieDao.findFavoriteTvShow(id)
     }
+
+    fun saveMovieAll(movies:List<MovieTemp>) = movieDao.saveMovieAll(movies)
+
+    fun getMovieFromDb() = movieDao.getMovieAll()
 }

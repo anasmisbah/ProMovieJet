@@ -9,7 +9,7 @@ object FakeDataDummy {
         val movies = ArrayList<Movie>()
         movies.add(
             Movie(
-                "movie1",
+                "1",
                 "A Star Is Born",
                 "7.5",
                 "English",
@@ -246,7 +246,7 @@ object FakeDataDummy {
 
         tvshows.add(
             TvShow(
-                "tvshow1",
+                "1",
                 "Arrow",
                 "5.8",
                 "English",

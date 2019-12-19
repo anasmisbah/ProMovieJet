@@ -74,6 +74,7 @@ class DetailMovieActivity : AppCompatActivity() {
         return super.onSupportNavigateUp()
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
         menuInflater.inflate(R.menu.nav_favorite,menu)
