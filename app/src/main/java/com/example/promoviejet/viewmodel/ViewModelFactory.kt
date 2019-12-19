@@ -10,17 +10,17 @@ import com.example.promoviejet.ui.favorite.FavoriteViewModel
 import com.example.promoviejet.ui.movie.MovieViewModel
 import com.example.promoviejet.ui.tvshow.TvShowViewModel
 
-class ViewModelFactory(private val movieRepository: MovieRepository) : ViewModelProvider.NewInstanceFactory(){
+class ViewModelFactory(
+    private val movieRepository: MovieRepository,
+    private val application: Application
+) : ViewModelProvider.NewInstanceFactory(){
 
     companion object{
         private var  INSTANCE : ViewModelFactory? = null
         fun getInstance(application: Application?) : ViewModelFactory{
-            if (INSTANCE == null){
-                synchronized(ViewModelFactory::class.java){
-                    INSTANCE = ViewModelFactory(Injection.provideRepository(application!!))
-                }
-            }
-            return INSTANCE!!
+            return INSTANCE ?: synchronized(ViewModelFactory::class.java){
+                ViewModelFactory(Injection.provideRepository(application!!),application)
+            }.also { INSTANCE = it }
         }
     }
 
@@ -31,7 +31,7 @@ class ViewModelFactory(private val movieRepository: MovieRepository) : ViewModel
         if (modelClass.isAssignableFrom(TvShowViewModel::class.java)){
             return TvShowViewModel(movieRepository) as T
         }else if (modelClass.isAssignableFrom(MovieViewModel::class.java)){
-            return MovieViewModel(movieRepository) as T
+            return MovieViewModel(application,movieRepository) as T
         }else if (modelClass.isAssignableFrom(DetailViewModel::class.java)){
             return DetailViewModel(movieRepository) as T
         }else if (modelClass.isAssignableFrom(FavoriteViewModel::class.java)){

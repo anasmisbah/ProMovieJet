@@ -133,4 +133,6 @@ class RemoteRepository {
             })
         return tvShowLiveData
     }
+
+    fun getMovie(apiKey: String) = apiClient.getMovie(apiKey)
 }

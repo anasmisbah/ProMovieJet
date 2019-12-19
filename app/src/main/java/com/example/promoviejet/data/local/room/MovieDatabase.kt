@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.promoviejet.data.local.entity.Movie
+import com.example.promoviejet.data.local.entity.MovieTemp
 import com.example.promoviejet.data.local.entity.TvShow
 
 
-@Database(entities = [Movie::class,TvShow::class],version = 1,exportSchema = false)
+@Database(entities = [Movie::class,TvShow::class,MovieTemp::class],version = 2,exportSchema = false)
 abstract class MovieDatabase : RoomDatabase(){
 
     abstract fun movieDao() : MovieDao
@@ -20,6 +21,7 @@ abstract class MovieDatabase : RoomDatabase(){
             synchronized(MovieDatabase::class.java){
                 if (INSTANCE == null){
                     INSTANCE = Room.databaseBuilder(context.applicationContext,MovieDatabase::class.java,"movie.db")
+                        .fallbackToDestructiveMigration()
                         .allowMainThreadQueries()
                         .build()
                 }

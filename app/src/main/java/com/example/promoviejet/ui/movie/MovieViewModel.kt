@@ -1,5 +1,7 @@
 package com.example.promoviejet.ui.movie
 
+import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,11 +16,13 @@ import retrofit2.Callback
 import retrofit2.Response
 import kotlin.math.log
 
-class MovieViewModel(private val movieRepository: MovieRepository) :ViewModel(){
+class MovieViewModel( application: Application ,private val movieRepository: MovieRepository) :ViewModel(){
 
-
+    val contex:Context = application.applicationContext
 
     fun getMovies():LiveData<List<Movie>> {
        return movieRepository.getMovie(BuildConfig.API_KEY)
     }
+
+    fun getMovieAll() = movieRepository.getMovieTemp(BuildConfig.API_KEY)
 }

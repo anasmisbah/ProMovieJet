@@ -1,5 +1,6 @@
 package com.example.promoviejet.data.remote
 
+import androidx.lifecycle.LiveData
 import com.example.promoviejet.data.remote.response.DetailMovieResponse
 import com.example.promoviejet.data.remote.response.DetailTvShowResponse
 import com.example.promoviejet.data.remote.response.MovieResponse
@@ -25,4 +26,8 @@ interface ApiService {
 
     @GET("${ENDPOINT_DETAIL_TV_SHOW}{id}")
     fun getDetailTvShow(@Path("id") id : String,@Query("api_key") apiKey: String) : Call<DetailTvShowResponse>
+
+
+    @GET(ENDPOINT_GET_MOVIE_NOW_PLAYING)
+    fun getMovie(@Query("api_key") apiKey:String): LiveData<ApiResponse<MovieResponse>>
 }

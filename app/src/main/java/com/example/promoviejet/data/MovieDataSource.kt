@@ -3,7 +3,10 @@ package com.example.promoviejet.data
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.example.promoviejet.data.local.entity.Movie
+import com.example.promoviejet.data.local.entity.MovieTemp
 import com.example.promoviejet.data.local.entity.TvShow
+import com.example.promoviejet.data.remote.ApiResponse
+import com.example.promoviejet.vo.Resource
 
 interface MovieDataSource {
 
@@ -42,5 +45,8 @@ interface MovieDataSource {
 
     //untuk halaman detail movie, check favorite moview
     fun checkFavoriteTvShow(id:Int):TvShow
+
+    //untuk halaman movie
+    fun getMovieTemp(apiKey: String): LiveData<Resource<List<MovieTemp>>>
 
 }

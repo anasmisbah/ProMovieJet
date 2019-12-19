@@ -4,21 +4,27 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.example.promoviejet.BuildConfig
 import com.example.promoviejet.data.local.LocalRepository
 import com.example.promoviejet.data.local.entity.Movie
+import com.example.promoviejet.data.local.entity.MovieTemp
 import com.example.promoviejet.data.local.entity.TvShow
+import com.example.promoviejet.data.remote.ApiResponse
 import com.example.promoviejet.data.remote.RemoteRepository
+import com.example.promoviejet.data.remote.response.MovieResponse
+import com.example.promoviejet.utils.ContextProviders
+import com.example.promoviejet.vo.Resource
 
-class MovieRepository(private val remoteRepository: RemoteRepository,private val localRepository: LocalRepository) : MovieDataSource{
+class MovieRepository(private val remoteRepository: RemoteRepository,private val localRepository: LocalRepository,private val coroutineContext: ContextProviders) : MovieDataSource{
 
 
 
     companion object{
         private var  INSTANCE : MovieRepository? = null
-        fun getInstance(remoteRepository: RemoteRepository,localRepository: LocalRepository): MovieRepository{
+        fun getInstance(remoteRepository: RemoteRepository,localRepository: LocalRepository,coroutineContext: ContextProviders): MovieRepository{
             if (INSTANCE == null){
                 synchronized(MovieRepository::class.java){
-                    INSTANCE = MovieRepository(remoteRepository,localRepository)
+                    INSTANCE = MovieRepository(remoteRepository,localRepository,coroutineContext)
                 }
             }
             return INSTANCE!!
@@ -74,5 +80,30 @@ class MovieRepository(private val remoteRepository: RemoteRepository,private val
     override fun checkFavoriteTvShow(id: Int): TvShow {
         return localRepository.checkFacoriteTvShow(id)
     }
+
+    override fun getMovieTemp(apiKey: String): LiveData<Resource<List<MovieTemp>>> {
+        return object : NetworkBoundResource<List<MovieTemp>, MovieResponse>(coroutineContext){
+            override fun saveCallResult(item: MovieResponse) {
+                val movies = item.results
+                movies.let { result->
+                    val movieTemp = result.map {
+                        MovieTemp(it.id.toString(),it.title,it.vote_average.toString(),it.original_language,it.overview,it.release_date,it.poster_path,it.backdrop_path)
+                    }
+
+                    localRepository.saveMovieAll(movieTemp)
+                }
+            }
+
+            override fun createCall(): LiveData<ApiResponse<MovieResponse>> = remoteRepository.getMovie(BuildConfig.API_KEY)
+
+
+            override fun shouldFetch(data: List<MovieTemp>?): Boolean = data != null
+
+            override fun loadFromDb(): LiveData<List<MovieTemp>> =localRepository.getMovieFromDb()
+
+
+        }.asLiveData()
+    }
+
 
 }
